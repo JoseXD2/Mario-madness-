@@ -154,7 +154,11 @@ class FreeplayState extends MusicBeatState
 
 			trace(md);
 		 */
-
+		
+                 #if mobileC
+		addVirtualPad(FULL, A_B_X_Y);
+		#end
+			
 		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		textBG.alpha = 0.6;
 		add(textBG);
