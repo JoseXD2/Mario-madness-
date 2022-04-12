@@ -54,7 +54,11 @@ import DialogueBoxPsych;
 #if sys
 import sys.FileSystem;
 #end
-
+	
+#if mobileC
+import ui.Mobilecontrols;
+#end
+	
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -282,7 +286,11 @@ class PlayState extends MusicBeatState
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
 	#end
-
+		
+        #if mobileC
+	var mcontrols:Mobilecontrols; 
+	#end
+		
 	private var luaArray:Array<FunkinLua> = [];
 
 	//Achievement shit
@@ -1482,7 +1490,30 @@ class PlayState extends MusicBeatState
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+	
+                #if mobileC
+			mcontrols = new Mobilecontrols();
+			switch (mcontrols.mode)
+			{
+				case VIRTUALPAD_RIGHT | VIRTUALPAD_LEFT | VIRTUALPAD_CUSTOM:
+					controls.setVirtualPadNOTES(mcontrols._virtualPad, FULL, NONE);
+				case HITBOX:
+					controls.setHitBoxNOTES(mcontrols._hitbox);
+				default:
+			}
+			trackedinputsNOTES = controls.trackedinputsNOTES;
+			controls.trackedinputsNOTES = [];
 
+			var camcontrol = new FlxCamera();
+			FlxG.cameras.add(camcontrol);
+			camcontrol.bgColor.alpha = 0;
+			mcontrols.cameras = [camcontrol];
+
+			mcontrols.visible = false;
+
+			add(mcontrols);
+		#end	
+			
 		if(curStage == 'exeport' || curStage == 'hatebg' || curStage == 'racing') {
 			camHUD.alpha = 0;
 		}
